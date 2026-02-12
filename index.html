@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Protocol</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: "Courier New", monospace;
+    background-color: #ffd1dc;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* contenitore principale */
+#mainContainer {
+    text-align: center;
+}
+
+/* immagini */
+img {
+    width: 260px;
+    border-radius: 15px;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+/* pulsanti */
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#yesBtn { background: #22c55e; }
+
+#noBtn {
+    background: #ef4444;
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
+/* messaggi amore */
+#loveContainer {
+    display: none;
+    text-align: center;
+}
+
+#loveMessage {
+    font-size: 72px;
+    color: #ec5578;
+    font-weight: bold;
+}
+
+#biteMessage {
+    font-size: 32px;
+    color: #d81b60;
+    font-weight: bold;
+    display: none;
+}
+
+#missMessage {
+    font-size: 25px;
+    color: #c2185b;
+    display: none;
+}
+
+/* sorpresa */
+#surpriseContainer {
+    position: absolute;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+}
+
+#dontRun {
+    font-size: 36px;
+    color: #ff1a75;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* animazione cuori */
+@keyframes rise {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-110vh) scale(1.8);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="mainContainer">
+    <img src="orso.jpg" id="mainImg">
+
+    <h1 id="initText">
+        Initialize RelationshipProtocol?<br><br>
+        if (you.beMyValentine) { execute(); }
+    </h1>
+
+    <button id="yesBtn">accept()</button>
+    <button id="noBtn">reject()</button>
+</div>
+
+<!-- blocco messaggi amore -->
+<div id="loveContainer">
+    <div id="loveMessage">TI AMO ❤️</div>
+    <div id="biteMessage">(e ti mordo)</div>
+    <div id="missMessage">e mi manchi</div>
+</div>
+
+<!-- sorpresa -->
+<div id="surpriseContainer">
+    <img src="sorpresa.jpg">
+    <div id="dontRun">non scappare :(</div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const mainImg = document.getElementById("mainImg");
+const initText = document.getElementById("initText");
+
+const loveContainer = document.getElementById("loveContainer");
+const biteMessage = document.getElementById("biteMessage");
+const missMessage = document.getElementById("missMessage");
+
+const surprise = document.getElementById("surpriseContainer");
+
+let clicks = 0;
+let canMove = true;
+
+/* ACCEPT */
+yesBtn.onclick = () => {
+
+    mainImg.style.display = "none";
+    initText.style.display = "none";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+
+    loveContainer.style.display = "block";
+
+    setTimeout(()=>biteMessage.style.display="block",300);
+    setTimeout(()=>missMessage.style.display="block",600);
+
+    // tanti cuori
+    for(let i=0;i<500;i++){
+
+        let h=document.createElement("div");
+        h.innerHTML="❤️";
+
+        h.style.position="fixed";
+        h.style.bottom="-40px";
+        h.style.left=Math.random()*100+"vw";
+        h.style.fontSize=(Math.random()*30+20)+"px";
+
+        let duration = Math.random()*2 + 3;
+        h.style.animation=`rise ${duration}s linear forwards`;
+
+        document.body.appendChild(h);
+
+        setTimeout(()=>h.remove(),duration*1000);
+    }
+};
+
+/* REJECT */
+noBtn.onclick = () => {
+
+    clicks++;
+
+    if (canMove) {
+        let x = window.innerWidth - noBtn.offsetWidth;
+        let y = window.innerHeight - noBtn.offsetHeight;
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random()*x+"px";
+        noBtn.style.top = Math.random()*y+"px";
+    }
+
+    if (clicks === 3) {
+
+        canMove = false;
+
+        mainImg.style.display = "none";
+        initText.style.display = "none";
+
+        noBtn.style.display = "none";
+
+        surprise.style.display = "flex";
+    }
+};
+</script>
+
+</body>
+</html>
